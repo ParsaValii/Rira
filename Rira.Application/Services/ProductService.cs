@@ -8,73 +8,65 @@ namespace Rira.Application.Services;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
-    
+
     public ProductService(IProductRepository productRepository) => _productRepository = productRepository;
 
-    public IEnumerable<Product> GetProductsInCategoryOne()
-    {
-        //Query for returning all products that are in category one
-
-        return from p in _productRepository.Products                                                            //Query expression syntax
-                     where p.Category == Categories.Category1
-                     select p;
-
-        //return _productRepository.Products.Where(p => p.Category == Categories.Category1);                    //Query fluent syntax
-
-    }
-
-    public Product? HighestPriceProduct()
-    {
-        //Query for returning Product with highest price
-
-        return (from p in _productRepository.Products                                                           //Query expression syntax
-                     orderby p.Price descending
-                     select p).FirstOrDefault();
-
-        // return _productRepository.Products.OrderByDescending(p => p.Price).FirstOrDefault();                 //Query fluent syntax
-
-    }
-    public decimal TotalPriceOfProducts()
-    {
-        //Query for returning sum of all products prices
-
-        return (from p in _productRepository.Products                                                           //Query expression syntax
-                      select p.Price).Sum();
 
 
-        // return _productRepository.Products.Sum(p => p.Price);                                                //Query fluent syntax
+    //Query for returning all products that are in category one
+    public IEnumerable<Product> GetProductsInCategoryOne() =>
+        from p in _productRepository.Products                                                            //Query expression syntax
+        where p.Category == Categories.Category1
+        select p;
 
-    }
-    public IEnumerable<GroupedProduct> ProductsGroupedBySameCategory() 
-    {
-        // Query for returning Products in order of category
+    // _productRepository.Products.Where(p => p.Category == Categories.Category1);                       //Query fluent syntax
 
-        return from p in _productRepository.Products                                                            //Query expression syntax
-                 group p by p.Category into g
-                 select new GroupedProduct
-                 {
-                     Category = g.Key,
-                     Products = g.ToList()
-                 };
 
-        // return _productRepository.Products                                                                   //Query fluent syntax
-        // .GroupBy(p => p.Category)
-        // .Select(g => new GroupedProduct
-        // {
-        //     Category = g.Key,
-        //     Products = g.ToList()
-        // });
 
-    }
-    public decimal AvragePriceOfProducts()
-    {
-        //Query for return avrage of Products prices
+    //Query for returning Product with highest price
+    public Product? HighestPriceProduct() =>
+        (from p in _productRepository.Products                                                           //Query expression syntax
+         orderby p.Price descending
+         select p).FirstOrDefault();
 
-        return (from p in _productRepository.Products                                                     //Query expression syntax
-                      select p.Price).Average();
+    // _productRepository.Products.OrderByDescending(p => p.Price).FirstOrDefault();                     //Query fluent syntax
 
-        
-        // return _productRepository.Products.Average(p => p.Price);                                      //Query fluent syntax
 
-    }
+
+    //Query for returning sum of all products prices
+    public decimal TotalPriceOfProducts() =>
+    (from p in _productRepository.Products                                                               //Query expression syntax
+     select p.Price).Sum();
+
+    // _productRepository.Products.Sum(p => p.Price);                                                    //Query fluent syntax
+
+
+
+    // Query for returning Products in order of category
+    public IEnumerable<GroupedProduct> ProductsGroupedBySameCategory() =>
+        from p in _productRepository.Products                                                            //Query expression syntax
+        group p by p.Category into g
+        select new GroupedProduct
+        {
+            Category = g.Key,
+            Products = g.ToList()
+        };
+
+    // _productRepository.Products                                                                      //Query fluent syntax
+    // .GroupBy(p => p.Category)
+    // .Select(g => new GroupedProduct
+    // {
+    //     Category = g.Key,
+    //     Products = g.ToList()
+    // });
+
+
+
+    //Query for return avrage of Products prices
+    public decimal AvragePriceOfProducts() =>
+    (from p in _productRepository.Products                                                             //Query expression syntax
+     select p.Price).Average();
+
+    // _productRepository.Products.Average(p => p.Price);                                              //Query fluent syntax
+
 }
